@@ -1,0 +1,21 @@
+
+Tests
+
+// Compile testMainOut for host
+gcc -DConsoleOutputWithPrintf testMainOut.c _console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o testMainOut
+
+// Compile tvmstack for host
+gcc -DConsoleOutputWithPrintf tvmstack.c _console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o tvmstack
+
+// Compile tvmstack for Arduino
+gcc mainArduino.c _console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o cmTestArduino
+
+
+
+Task 0
+
+// Compile cm
+gcc _console.c bsl_COut.c bsl_xtoa.c admin.c hal.c ioreg.c out.c vm.c vmstack.c -o cm
+
+// Compile aunit
+gcc "aunit.c" -o aunit
