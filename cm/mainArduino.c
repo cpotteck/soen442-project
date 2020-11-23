@@ -2,11 +2,21 @@
 
 #include "hal.h"
 #include "out.h"
+#include "vm.h"
 #include <util/delay.h>
 
 void main(void) {
     Hal_Init();
 
+    // Test pre-compiled program
+    VMOut_PutS("Test pre-compiled program:\n");
+    VMOut_PutS("1\n");
+    u8 mem[] = { 0x91, 0xFF, 0x82, 0x00 };
+    VM_Init(mem);
+    VM_execute(mem);
+
+    // Test UART
+    /*
     while(true) {
       VMOut_PutS("Test Out:<2\n");
       VMOut_PutS("Bools: [true|false|true|true]\n");
@@ -26,5 +36,5 @@ void main(void) {
       VMOut_PutX(0xFFFFFFFFL);
       VMOut_PutS("]\n");
       _delay_ms(5000);
-    }
+    }*/
 }

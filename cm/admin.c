@@ -132,6 +132,15 @@ int main(int argc, char* argv[]) {
 //t    VMOut_PutS("GetBaseAddr(): sizeof u32 = "); VMOut_PutI((i32)sizeof(u32)); VMOut_PutN();
 
     mem = GetBaseAddr(memAllocated, (u32)1024UL);
+
+    /*
+    Student - This is to test static pre-compiles programs
+    u8 mem[] = { 0x91, 0xFF, 0x82, 0x00 };
+    VM_Init(mem);
+    VM_execute(mem);
+    return 0;
+    */
+
 //t    VMOut_PutS("Admin: memAllocated = "); VMOut_PutX((u32)memAllocated); VMOut_PutN();
 //t    VMOut_PutS("Admin: mem          = "); VMOut_PutX((u32)mem); VMOut_PutN();
 
