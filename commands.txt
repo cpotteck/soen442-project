@@ -7,6 +7,9 @@ gcc -DConsoleOutputWithPrintf testMainOut.c _console.c bsl_COut.c bsl_xtoa.c hal
 // Compile tvmstack for host
 gcc -DConsoleOutputWithPrintf tvmstack.c _console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o tvmstack
 
+// Compile mainHost for host
+gcc -DConsoleOutputWithPrintf mainHost.c _console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o cmTestHost
+
 // Compile mainArduino for Arduino
 See cmTestArduino.bat
 
