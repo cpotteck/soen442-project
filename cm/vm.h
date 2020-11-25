@@ -7,7 +7,7 @@
 #ifndef __vm_h
 #define __vm_h
 
-#include "_stdtype.h"
+#include "bsl_stdtype.h"
 
 void VM_Init(u8* mainAddr);
 void VM_execute(u8* startAddr);

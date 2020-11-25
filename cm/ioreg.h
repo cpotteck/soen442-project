@@ -7,7 +7,7 @@
 #ifndef __CmVM_IOReg_h
 #define __CmVM_IOReg_h
 
-#include "_stdtype.h"
+#include "bsl_stdtype.h"
 
 u32  IOReg_Read (u32 ioreg);
 void IOReg_Write(u32 ioreg, u32 value);

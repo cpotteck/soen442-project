@@ -7,7 +7,7 @@
 #ifndef __interman_h
 #define __interman_h
 
-#include "_stdtype.h"
+#include "bsl_stdtype.h"
 
 // End-of-interrupt to 8259 controller
 // B0 20    mov  al, 0x20

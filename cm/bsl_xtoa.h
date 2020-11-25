@@ -7,7 +7,7 @@
 #ifndef __CmVM_xtoa_h
 #define __CmVM_xtoa_h
 
-#include "_stdtype.h"
+#include "bsl_stdtype.h"
 
 void bsl_utoa(u32 n, char* buf, int next, u8 base);
 
