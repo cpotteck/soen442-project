@@ -7,7 +7,7 @@
 #ifndef __CmVM_Out_h
 #define __CmVM_Out_h
 
-#include "_stdtype.h"
+#include "bsl_stdtype.h"
 
         struct IVMOutDesc;
 typedef struct IVMOutDesc* IOut;
