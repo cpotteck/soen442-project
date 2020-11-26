@@ -13,6 +13,8 @@
 #define false              ((bool)0)
 #define true               ((bool)1)
 
+#define public
+
 typedef uint8_t   u8;
 typedef int8_t    i8;
 typedef uint16_t  u16;
