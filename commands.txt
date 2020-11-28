@@ -19,3 +19,9 @@ gcc -DConsoleOutputWithPrintf bsl_console.c bsl_COut.c bsl_xtoa.c admin.c hal.c 
 
 // Compile aunit
 gcc "aunit.c" -o aunit
+
+
+Task 5
+
+// Compile host loader
+gcc host_loader.c -o host_loader
