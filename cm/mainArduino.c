@@ -50,24 +50,36 @@ int main(void) {
    *  8-bit character size
    *  1-bit stop bit
   */
-  char mem[3] = { };
+  u8* program  = (u8*)calloc(0, sizeof(u8));
   int count = 0;
+
+  char programSize[2] = { };
+  int sizeCount = 0;
+  int size = 0;
+
+  Hal_Init();
+
   while(1) {
     char readChar = UART_receive();
-    
-    if (readChar == 1) {
-      break;
-    }
-    else {
-      mem[count++] = readChar;
-    }
 
+    // Calculate program size using first 2 bytes
+    if (sizeCount <= 1) {
+      programSize[sizeCount++] = readChar;
+      size = programSize[0] << 8 | programSize[1];
+    }
+    // Load program
+    else {
+      program = realloc(program, sizeof(u8) + count);
+      *(program + count) = readChar;
+      count++;
+
+      if (count == size) {
+        break;
+      }
+    }
   }
 
   // Run program
-  Hal_Init();
-  VMOut_PutS("Test pre-compiled program:\n");
-  VMOut_PutS("1\n");
-  VM_Init(mem);
-  VM_execute(mem);
+  VM_Init(program);
+  VM_execute(program);
 }
