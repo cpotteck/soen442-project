@@ -3,38 +3,71 @@
 #include "hal.h"
 #include "out.h"
 #include "vm.h"
-#include <util/delay.h>
+#define F_CPU 16000000UL
+#include <avr/io.h>
 
-void main(void) {
-    Hal_Init();
+unsigned int UBRR0_value = 103;
+bool toggle = false;
 
-    // Test pre-compiled program
-    VMOut_PutS("Test pre-compiled program:\n");
-    VMOut_PutS("1\n");
-    u8 mem[] = { 0x91, 0xFF, 0x82, 0x00 };
-    VM_Init(mem);
-    VM_execute(mem);
+char UART_receive() {
+  char readChar;
 
-    // Test UART
-    /*
-    while(true) {
-      VMOut_PutS("Test Out:<2\n");
-      VMOut_PutS("Bools: [true|false|true|true]\n");
-      VMOut_PutS("Ints:  [-1|-2147483648|2147483647|4294967295|FFFFFFFF]\n");
+  // Wait until unread data received
+  while ( !(UCSR0A & (1 << RXC0)) ) {
+    PORTB |= 1 << 5;
+  };
 
-      VMOut_PutS("Bools: [");
-      VMOut_PutB(-1); VMOut_PutC('|');
-      VMOut_PutB(0);  VMOut_PutC('|');
-      VMOut_PutB(1);  VMOut_PutC('|');
-      VMOut_PutB(2);  VMOut_PutS("]\n");
+  PORTB ^= (1 << 5);
+  // Read data
+  readChar = (char)UDR0;
 
-      VMOut_PutS("Ints:  [");
-      VMOut_PutI(0xFFFFFFFFL); VMOut_PutC('|');
-      VMOut_PutI(0x80000000L); VMOut_PutC('|');
-      VMOut_PutI(0x7FFFFFFFL); VMOut_PutC('|');
-      VMOut_PutU(0xFFFFFFFFL); VMOut_PutC('|');
-      VMOut_PutX(0xFFFFFFFFL);
-      VMOut_PutS("]\n");
-      _delay_ms(5000);
-    }*/
+  return readChar;
+}
+
+void UART_transmit(char data) {
+  while ( !(UCSR0A & (1 << UDRE0)) );
+  UDR0 = data;
+}
+
+
+
+
+int main(void) {
+  
+  // Set PIN 13 (PB5) as output to control LED
+  DDRB = 1 << 5;
+
+  // Set BAUD rate
+  UBRR0H = UBRR0_value >> 8; 
+  UBRR0L = UBRR0_value;
+
+  // Enable receiver and transmitter
+  UCSR0B |= (1 << RXEN0) | (1 << TXCIE0);
+  
+  /*  Using default frame format:
+   *  Async
+   *  No parity
+   *  8-bit character size
+   *  1-bit stop bit
+  */
+  char mem[3] = { };
+  int count = 0;
+  while(1) {
+    char readChar = UART_receive();
+    
+    if (readChar == 1) {
+      break;
+    }
+    else {
+      mem[count++] = readChar;
+    }
+
+  }
+
+  // Run program
+  Hal_Init();
+  VMOut_PutS("Test pre-compiled program:\n");
+  VMOut_PutS("1\n");
+  VM_Init(mem);
+  VM_execute(mem);
 }

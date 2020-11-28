@@ -56,11 +56,11 @@ int main()
   }
   else
   {
-    printf("\nSetting DCB Structure Successfull");
+    printf("\n Successfully set serial port configurations");
     printf("\n  Baudrate = %d", dcbSerialParams.BaudRate);
     printf("\n  ByteSize = %d", dcbSerialParams.ByteSize);
     printf("\n  StopBits = %d", dcbSerialParams.StopBits);
-    printf("\n  Parity   = %d", dcbSerialParams.Parity);
+    printf("\n  Parity   = %d \n\n", dcbSerialParams.Parity);
   }
 
   /*---------------------- Set Timeouts ----------------------*/
@@ -79,15 +79,15 @@ int main()
     exit(0);
   }
   else {
-    printf("Setting Serial Port Timeouts Successfull \n");
+    printf("Successfully set serial port timeouts \n");
   }
 
   /*---------------------- Transmit Message ----------------------*/
 
-  char   messageBuf[] = "a";            // char or byte array
+  byte messageBuf[5] = { 0x91, 0xFF, 0x82, 0x00, 0x01 };           // char or byte array
+  //char messageBuf[4] = { 'T', 'e', 's', 't' };
   DWORD  sizeBuf = sizeof(messageBuf);
   DWORD  numBytesBuf = 0;               // Stores the number of bytes written using WriteFile
-
 
   Status = WriteFile(handleCom,
               messageBuf,
@@ -101,9 +101,65 @@ int main()
     exit(0);
   }
   else {
-    printf("\n Message sent to %s: %s \n", PortName, messageBuf);
+    //printf("\n Message sent to %s: %c \n", PortName, messageBuf[0]);
   }
 
+/*---------------------- Receive ----------------------*/
+
+  DWORD dwEventMask;
+  char  ReadData;
+  DWORD NoBytesRead;
+  char SerialBuffer[64] = { 0 }; 
+  unsigned char count = 0;
+
+  // Mask
+  Status = SetCommMask(handleCom, EV_RXCHAR);
+  if (Status == FALSE)
+  {
+    printf_s("Error in SetCommMask\n\n");
+    system("pause");
+    exit(0);
+  }
+
+  // Wait for receiving
+  Status = WaitCommEvent(handleCom, &dwEventMask, NULL);
+  if (Status == FALSE)
+  {
+    printf_s("Error in WaitCommEvent\n\n");
+    system("pause");
+    exit(0);
+  }
+
+  // Read and store in serial buffer
+  do
+  {
+      Status = ReadFile(handleCom, &ReadData, sizeof(ReadData), &NoBytesRead, NULL);
+      SerialBuffer[count] = ReadData;
+      ++count;
+  }
+  while (NoBytesRead > 0);
+  --count;
+
+  int index = 0;
+
+  // Print as ASCII characters
+  printf("\n\n---ASCII---\n");
+  for (index = 0; index < count; ++index)
+  {
+    printf("%c", SerialBuffer[index]);
+  }
+  printf("\n");
+
+  // Print as hex
+  printf("---Hex---\n");
+  for (index = 0; index < count; ++index)
+  {
+    printf("0x%02x ", (unsigned char)SerialBuffer[index]);
+  }
+  printf("\n");
+
+
+/*---------------------- Close ----------------------*/
   CloseHandle(handleCom);
   return 0;
 }
