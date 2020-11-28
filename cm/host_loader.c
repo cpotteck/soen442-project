@@ -1,6 +1,7 @@
 //======================= Inspired by =======================//
 // www.xanthium.in
 // Copyright (C) 2014 Rahul.S
+// https://github.com/xanthium-enterprises/Serial-Programming-Win32API-C
 //===========================================================//
 
 #include<windows.h>
