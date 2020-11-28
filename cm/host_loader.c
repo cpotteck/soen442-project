@@ -50,7 +50,7 @@ int main()
 
   if (Status == FALSE)
   {
-    printf("Error! in Setting DCB Structure \n\n");
+    printf("Error in setting serial port configurations \n\n");
     system("pause");
     exit(0);
   }
@@ -74,12 +74,12 @@ int main()
   comTimeouts.WriteTotalTimeoutMultiplier = 10;
 
   if (SetCommTimeouts(handleCom, &comTimeouts) == FALSE){
-    printf("Error! in Setting Time Outs \n\n");
+    printf("Error in setting timeouts \n\n");
     system("pause");
     exit(0);
   }
   else {
-    printf("Successfully set serial port timeouts \n");
+    printf("Successfully set serial port timeouts \n\n");
   }
 
   /*---------------------- Transmit Message ----------------------*/
@@ -105,11 +105,11 @@ int main()
   }
 
 /*---------------------- Receive ----------------------*/
-
+  printf("Receiving...\n\n");
   DWORD dwEventMask;
   char  ReadData;
   DWORD NoBytesRead;
-  char SerialBuffer[64] = { 0 }; 
+  char* SerialBuffer = (char*)calloc(0, sizeof(char));
   unsigned char count = 0;
 
   // Mask
@@ -134,25 +134,27 @@ int main()
   do
   {
       Status = ReadFile(handleCom, &ReadData, sizeof(ReadData), &NoBytesRead, NULL);
-      SerialBuffer[count] = ReadData;
-      ++count;
+      SerialBuffer = realloc(SerialBuffer, sizeof(char) + count);
+      *(SerialBuffer + count) = ReadData;
+      count++;
   }
   while (NoBytesRead > 0);
-  --count;
+  count--;
+  printf("---Character Count---\n%d", count);
 
   int index = 0;
 
   // Print as ASCII characters
   printf("\n\n---ASCII---\n");
-  for (index = 0; index < count; ++index)
+  for (index = 0; index < count; index++)
   {
-    printf("%c", SerialBuffer[index]);
+    printf("%c", *(SerialBuffer + index));
   }
   printf("\n");
 
   // Print as hex
   printf("---Hex---\n");
-  for (index = 0; index < count; ++index)
+  for (index = 0; index < count; index++)
   {
     printf("0x%02x ", (unsigned char)SerialBuffer[index]);
   }
