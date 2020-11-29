@@ -6,6 +6,8 @@
 #define F_CPU 16000000UL
 #include <avr/io.h>
 
+#define MemMax 4096
+
 unsigned int UBRR0_value = 103;
 bool toggle = false;
 
@@ -69,6 +71,13 @@ int main(void) {
     }
     // Load program
     else {
+      if (size > MemMax ) {
+        VMOut_PutS("Program is too big (max ");
+        VMOut_PutI(MemMax);
+        VMOut_PutS(" bytes)\n");
+        break;
+      }
+
       program = realloc(program, sizeof(u8) + count);
       *(program + count) = readChar;
       count++;
