@@ -52,43 +52,47 @@ int main(void) {
    *  8-bit character size
    *  1-bit stop bit
   */
-  u8* program  = (u8*)calloc(0, sizeof(u8));
-  int count = 0;
-
-  char programSize[2] = { };
-  int sizeCount = 0;
-  int size = 0;
-
-  Hal_Init();
-
+  
   while(1) {
-    char readChar = UART_receive();
+    Hal_Init();
 
-    // Calculate program size using first 2 bytes
-    if (sizeCount <= 1) {
-      programSize[sizeCount++] = readChar;
-      size = programSize[0] << 8 | programSize[1];
-    }
-    // Load program
-    else {
-      if (size > MemMax ) {
-        VMOut_PutS("Program is too big (max ");
-        VMOut_PutI(MemMax);
-        VMOut_PutS(" bytes)\n");
-        break;
+    u8* program  = (u8*)calloc(0, sizeof(u8));
+    int count = 0;
+
+    u8 programSize[2] = { };
+    int sizeCount = 0;
+    int size = 0;
+
+    while(1) {
+      char readChar = UART_receive();
+      // Calculate program size using first 2 bytes
+      if (sizeCount <= 1) {
+        programSize[sizeCount++] = (u8)readChar;
+        if (sizeCount == 2) {
+          size = programSize[0] << 8 | programSize[1];
+        }
       }
+      // Load program
+      else {
+        if (size > MemMax ) {
+          VMOut_PutS("Program is too big (max ");
+          VMOut_PutI(MemMax);
+          VMOut_PutS(" bytes)\n");
+          break;
+        }
 
-      program = realloc(program, sizeof(u8) + count);
-      *(program + count) = readChar;
-      count++;
+        program = realloc(program, sizeof(u8) + count);
+        *(program + count) = readChar;
+        count++;
 
-      if (count == size) {
-        break;
+        if (count == size) {
+          break;
+        }
       }
     }
+
+    // Run program
+    VM_Init(program);
+    VM_execute(program);
   }
-
-  // Run program
-  VM_Init(program);
-  VM_execute(program);
 }
