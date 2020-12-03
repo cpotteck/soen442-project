@@ -15,7 +15,7 @@ typedef enum {
 } Command;
 
 struct ReadBuffer {
-  byte* buffer;
+  u8* buffer;
   u16 size;
 };
 

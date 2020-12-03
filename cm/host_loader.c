@@ -35,14 +35,14 @@ static struct ReadBuffer loadObjFile(FILE* f) {
     buf[0] = (u8)fgetc(f);
     buf[1] = (u8)fgetc(f);
     struct ReadBuffer readTargetBuffer;
-    byte* messageBuf = (u8*)calloc(0, sizeof(u8));
-    messageBuf = realloc(messageBuf, sizeof(byte) + 1);
+    u8* messageBuf = (u8*)calloc(0, sizeof(u8));
+    messageBuf = realloc(messageBuf, sizeof(u8) + 1);
     *(messageBuf) = buf[0];
     *(messageBuf + 1) = buf[1];
     size = (u16)((buf[0] << 8) | buf[1]) + 2; // Include first two bytes
 
     for (n = 2; n < size+2; n++) {
-        messageBuf = realloc(messageBuf, sizeof(byte) + n);
+        messageBuf = realloc(messageBuf, sizeof(u8) + n);
         *(messageBuf + n) = (u8)fgetc(f);
     }
 
@@ -284,7 +284,17 @@ void printReadBuffer(struct ReadBuffer receiveBuffer) {
 }
 
 
+byte* createSendDataPacket(byte* data, u16 size) {
+  byte* packet = malloc(2 * sizeof(byte));
+  *(packet) = size + 2;
+  *(packet + 1) = SEND_DATA;
 
+  u16 index;
+  for(index = 0; index < size; index++) {
+    packet = realloc(packet, sizeof(byte) + 1);
+    *(packet + 1) = data[index];
+  }
+}
 
 
 int main(int argc, char* argv[]) {
@@ -312,10 +322,13 @@ int main(int argc, char* argv[]) {
         return 0;
       }
       printf("Program file size: %u bytes\n", messageBufSize);
+      
+      byte* packet = createSendDataPacket(messageBuf, 8);
+      sendToTarget(handleCom, messageBuf, messageBufSize);
 
       /*---------------------- Send Program ----------------------*/
 
-      sendToTarget(handleCom, messageBuf, messageBufSize);
+      //sendToTarget(handleCom, messageBuf, messageBufSize);
 
       /*---------------------- Print Received ----------------------*/
 
