@@ -12,11 +12,11 @@ typedef enum {
   GET_STATUS,
   SEND_DATA,
   RESET
-};
+} Command;
 
-struct ReadTargetBuffer {
-  char* buffer;
-  u8 size;
+struct ReadBuffer {
+  byte* buffer;
+  u16 size;
 };
 
 #endif

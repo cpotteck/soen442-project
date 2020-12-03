@@ -10,7 +10,6 @@
 #include "vm.h"
 #include "command_types.h"
 
-byte* messageBuf;
 
 const char *GetFilenameExt(const char *filename) {
     const char *dot = strrchr(filename, '.');
@@ -29,12 +28,14 @@ const char *GetFileName(const char *path) {
     return pfile;
 }
 
-static u16 loadObjFile(FILE* f) {
+static struct ReadBuffer loadObjFile(FILE* f) {
     u16 n, size = 0;
     u8  buf[2];
 
     buf[0] = (u8)fgetc(f);
     buf[1] = (u8)fgetc(f);
+    struct ReadBuffer readTargetBuffer;
+    byte* messageBuf = (u8*)calloc(0, sizeof(u8));
     messageBuf = realloc(messageBuf, sizeof(byte) + 1);
     *(messageBuf) = buf[0];
     *(messageBuf + 1) = buf[1];
@@ -60,15 +61,18 @@ static u16 loadObjFile(FILE* f) {
     */
 
     fclose(f);
-    return size;
+    readTargetBuffer.buffer = messageBuf;
+    readTargetBuffer.size = size;
+    return readTargetBuffer;
 }
 
-i32 readFile(char* argv) {
+struct ReadBuffer readFile(char* argv) {
   FILE* file;
   char  filename[200];
   const char* name;
   const char* ext;
-
+  struct ReadBuffer readTargetBuffer;
+  readTargetBuffer.size = 0;
 
   char *pfile;
 
@@ -85,16 +89,17 @@ i32 readFile(char* argv) {
       file = fopen(pfile, "rb" );
       if (file == NULL) {
           printf("%s does not exist.\n", filename);
-          return -1;
+          return readTargetBuffer;
       }
-      u16 size = loadObjFile(file);
-      if (!size) {
-        printf("Successfully loaded program file.\n");
-        return size;
+      readTargetBuffer = loadObjFile(file);
+      u16 size = readTargetBuffer.size;
+      if (size) {
+        printf("Successfully read program file.\n");
+        return readTargetBuffer;
       }
   } else {
       printf("Error: Must have a file with '.exe' extension.\n");
-      return -3;
+      return readTargetBuffer;
   }
 
 }
@@ -104,14 +109,14 @@ void printUsage() {
   printf("-send <filename>\t Send target program\n");
 }
 
-struct ReadTargetBuffer receiveFromTarget(HANDLE handleCom) {
+struct ReadBuffer receiveFromTarget(HANDLE handleCom) {
   /*---------------------- Receive ----------------------*/
 
   printf("Receiving...\n\n");
   DWORD dwEventMask;
   char  ReadData;
   DWORD NoBytesRead;
-  struct ReadTargetBuffer readTargetBuffer;
+  struct ReadBuffer readTargetBuffer;
   char* SerialBuffer = (char*)calloc(0, sizeof(char));
   u8 count = 0;
 
@@ -254,10 +259,10 @@ HANDLE setupCommunication() {
   return handleCom;
 }
 
-void printReadTargetBuffer(struct ReadTargetBuffer receiveBuffer) {
+void printReadBuffer(struct ReadBuffer receiveBuffer) {
   char* buffer = receiveBuffer.buffer;
   int bufferSize = receiveBuffer.size;
-  printf("---Character Count bruh---\n%d", bufferSize);
+  printf("---Character Count---\n%d", bufferSize);
 
   int index = 0;
 
@@ -300,9 +305,10 @@ int main(int argc, char* argv[]) {
 
       /*---------------------- Read .exe Program File ----------------------*/
 
-      messageBuf = (u8*)calloc(0, sizeof(u8));
-      i32 messageBufSize = readFile(argv[2]);
-      if (messageBufSize < 0) {
+      struct ReadBuffer readTargetBuffer = readFile(argv[2]);
+      byte* messageBuf = readTargetBuffer.buffer;
+      u16 messageBufSize = readTargetBuffer.size;
+      if (messageBufSize <= 0) {
         return 0;
       }
       printf("Program file size: %u bytes\n", messageBufSize);
@@ -313,8 +319,8 @@ int main(int argc, char* argv[]) {
 
       /*---------------------- Print Received ----------------------*/
 
-      struct ReadTargetBuffer receiveBuffer = receiveFromTarget(handleCom);
-      printReadTargetBuffer(receiveBuffer);
+      struct ReadBuffer receiveBuffer = receiveFromTarget(handleCom);
+      printReadBuffer(receiveBuffer);
 
       /*---------------------- Close ----------------------*/
 
