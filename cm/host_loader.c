@@ -284,17 +284,6 @@ void printReadBuffer(struct ReadBuffer receiveBuffer) {
 }
 
 
-byte* createSendDataPacket(byte* data, u16 size) {
-  byte* packet = malloc(2 * sizeof(byte));
-  *(packet) = size + 2;
-  *(packet + 1) = SEND_DATA;
-
-  u16 index;
-  for(index = 0; index < size; index++) {
-    packet = realloc(packet, sizeof(byte) + 1);
-    *(packet + 1) = data[index];
-  }
-}
 
 
 int main(int argc, char* argv[]) {
@@ -322,13 +311,10 @@ int main(int argc, char* argv[]) {
         return 0;
       }
       printf("Program file size: %u bytes\n", messageBufSize);
-      
-      byte* packet = createSendDataPacket(messageBuf, 8);
-      sendToTarget(handleCom, messageBuf, messageBufSize);
 
       /*---------------------- Send Program ----------------------*/
 
-      //sendToTarget(handleCom, messageBuf, messageBufSize);
+      sendToTarget(handleCom, messageBuf, messageBufSize);
 
       /*---------------------- Print Received ----------------------*/
 
