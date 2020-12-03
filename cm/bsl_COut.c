@@ -58,9 +58,9 @@ static void COut_Init(void) {
   UCSR0B |= (1 << TXCIE0);
 }
 
-static void COut_PutB(bool b)        { Console_Putchar(b ? 'T' : 'F'); }
 static void COut_PutC(char c)        { Console_Putchar(c); }
 static void COut_PutS(const char* s) { while (*s) Console_Putchar(*s++); }
+static void COut_PutB(bool b)        { COut_PutS(b ? "true" : "false"); }
 static void COut_PutI(i32  i)        { bsl_itoa(i, buf); COut_PutS(buf); }
 static void COut_PutU(u32  u)        { bsl_utoa(u, buf, 0, 10); COut_PutS(buf); }
 static void COut_PutX(u32  x)        { bsl_utoa(x, buf, 0, 16); COut_PutS(buf); } // Same behavior as Dos16 VM:
