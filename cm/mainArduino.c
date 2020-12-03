@@ -3,6 +3,7 @@
 #include "hal.h"
 #include "out.h"
 #include "vm.h"
+#include "command_types.h"
 #define F_CPU 16000000UL
 #include <avr/io.h>
 

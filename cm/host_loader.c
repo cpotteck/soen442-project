@@ -8,6 +8,7 @@
 #include<stdio.h>
 #include <string.h>
 #include "vm.h"
+#include "command_types.h"
 
 byte* messageBuf;
 
@@ -62,7 +63,7 @@ static u16 loadObjFile(FILE* f) {
     return size;
 }
 
-u16 readFile(int argc, char* argv[]) {
+u16 readFile(int argc, char* argv) {
   FILE* file;
   char  filename[200];
   const char* name;
@@ -71,7 +72,7 @@ u16 readFile(int argc, char* argv[]) {
   if (argc == 2) {
       char *pfile;
 
-      strcpy(filename, argv[1]);
+      strcpy(filename, argv);
       name = GetFileName(filename);
       ext  = GetFilenameExt(filename);
       strcpy(filename, name);
@@ -109,7 +110,7 @@ int main(int argc, char* argv[]) {
   /*---------------------- Read .exe Program File ----------------------*/
 
   messageBuf = (u8*)calloc(0, sizeof(u8));
-  u16 messageBufSize = readFile(argc, argv);
+  u16 messageBufSize = readFile(argc, argv[1]);
   printf("Program file size: %u bytes\n", messageBufSize);
   
   /*---------------------- Open Port ----------------------*/
