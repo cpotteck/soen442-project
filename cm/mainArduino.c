@@ -6,7 +6,7 @@
 #define F_CPU 16000000UL
 #include <avr/io.h>
 
-#define MemMax 4096
+#define MemMax 300
 
 unsigned int UBRR0_value = 103;
 bool toggle = false;
@@ -55,13 +55,14 @@ int main(void) {
   
   while(1) {
     Hal_Init();
-
-    u8* program  = (u8*)calloc(0, sizeof(u8));
+    u8 program[MemMax]  = {};
     int count = 0;
 
     u8 programSize[2] = { };
     int sizeCount = 0;
     int size = 0;
+
+    bool run = true;
 
     while(1) {
       char readChar = UART_receive();
@@ -75,27 +76,35 @@ int main(void) {
       // Load program
       else {
         if (size > MemMax ) {
+
+          // Ignore rest of program
+          count++;
+          while (count < size) {
+            count++;
+            char garbo = UART_receive();
+          }
+          
+          run = false;
           VMOut_PutS("Program is too big (max ");
           VMOut_PutI(MemMax);
           VMOut_PutS(" bytes)\n");
           break;
         }
+        else {
+          *(program + count) = readChar;
+          count++;
 
-        program = realloc(program, sizeof(u8) + count);
-        *(program + count) = readChar;
-        count++;
-
-        if (count == size) {
-          break;
+          if (count == size) {
+            break;
+          }
         }
       }
     }
 
-    // Run program
-    VM_Init(program);
-    VM_execute(program);
-
-    // Reset
-    free(program);
+    if (run == true) {
+      // Run program
+      VM_Init(program);
+      VM_execute(program);
+    }
   }
 }
