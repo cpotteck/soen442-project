@@ -22,6 +22,10 @@
 #include "ioreg.h"
 #endif
 
+#ifdef InterruptManagerOn
+#include "hal_interman.h"
+#endif
+
 extern  u8*   mem; // Need the memory address for the loader.
 
 #define SpInitial  200
@@ -55,27 +59,32 @@ void VM_Init(u8* mainAddr) {
 //-----------------------------------------------------------------------
 // Interrupt Manager - first parameter is pushed first
 //-----------------------------------------------------------------------
-static void InterruptManager(int op) {
+static u8* InterruptManager(int op, u8* ip) {
     u32 handlerAddr;
     u8  number;
+    u8  *savedIp;
 
     switch( op & 0x0F ) {
         case 0: Interrupt_Disable(); break;
         case 1: Interrupt_Enable(); break;
-        case 2: Stack_Push(runningStack, (u32)Interrupt_SaveAndDisable()); break;
-        case 3: Interrupt_Restore( Stack_Pop(runningStack) ); break;
-
+        case 2: Stack_Push(runningStack, (u32)Interrupt_SaveAndDisable());
+                Stack_Push(runningStack, (u32)ip);
+                break;
+        case 3: ;
+                savedIp = Stack_Pop(runningStack);
+                Interrupt_Restore( Stack_Pop(runningStack) );
+                break;
         case 4: /* void Interrupt_SetVector(u8 number, u32 handlerAddr) */
             handlerAddr = (u32)Stack_Pop(runningStack);
             number      =  (u8)Stack_Pop(runningStack);
             Interrupt_SetVector(number, handlerAddr);
             break;
-
         case 5: /* u32  Interrupt_GetVector(u8 number) */
             number = (u8)Stack_Pop(runningStack);
             Stack_Push(runningStack, (u32)Interrupt_GetVector(number));
             break;
     }
+    return savedIp;
 }
 #endif
 //-----------------------------------------------------------------------
@@ -296,8 +305,11 @@ void VM_execute(u8* startAddr) {
                 switch( op ) {
 #ifdef InterruptManagerOn
                     // Interrupt Manager
-                    case 0x00: case 0x01: case 0x02: case 0x03: case 0x04: case 0x05:
-                        InterruptManager(op);
+                    case 0x00: case 0x01: case 0x02: case 0x03: case 0x04: case 0x05: ;
+                        u8* savedIp = InterruptManager(op, ip);
+                        if (savedIp) {
+                            ip = savedIp;
+                        }
                         break;
 #endif
                     /* Kernel I/O */

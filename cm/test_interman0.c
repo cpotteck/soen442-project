@@ -5,20 +5,20 @@
 */
 
 #include <stdio.h>
-#include <dos.h>
+// #include <dos.h>
 
 #include "hal.h" // Hal_Init()
 #include "out.h" // All VMOut_Put*
 
 #include "hal_interman.h"
 
-#define __flags() (__emit__(0x9C),__emit__(0x58))
+// #define __flags() (__emit__(0x9C),__emit__(0x58))
 
-#define IF 0x0200
+#define IF 0x80
 #define Enabled  "[e]"
 #define Disabled "[d]"
 
-u16  Flags() { __flags(); }
+// TODO
 //     asm pushf;   // 9C
 //     asm pop ax;  // 58
 // }
