@@ -29,7 +29,7 @@ const char *GetFileName(const char *path) {
 }
 
 static u16 loadObjFile(FILE* f) {
-    u16 n, size;
+    u16 n, size = 0;
     u8  buf[2];
 
     buf[0] = (u8)fgetc(f);
@@ -62,7 +62,7 @@ static u16 loadObjFile(FILE* f) {
     return size;
 }
 
-byte* readFile(int argc, char* argv[]) {
+u16 readFile(int argc, char* argv[]) {
   FILE* file;
   char  filename[200];
   const char* name;
@@ -86,10 +86,10 @@ byte* readFile(int argc, char* argv[]) {
               printf("%s does not exist.\n", filename);
               return -1;
           }
-
-          if (!loadObjFile(file)) {
+          u16 size = loadObjFile(file);
+          if (!size) {
             printf("Successfully loaded program file.\n");
-            return -2;
+            return size;
           }
       } else {
           printf("Error: Must have a file with '.exe' extension.\n");
@@ -110,6 +110,7 @@ int main(int argc, char* argv[]) {
 
   messageBuf = (u8*)calloc(0, sizeof(u8));
   u16 messageBufSize = readFile(argc, argv);
+  printf("Program file size: %u bytes\n", messageBufSize);
   
   /*---------------------- Open Port ----------------------*/
 

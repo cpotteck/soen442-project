@@ -94,5 +94,8 @@ int main(void) {
     // Run program
     VM_Init(program);
     VM_execute(program);
+
+    // Reset
+    free(program);
   }
 }
