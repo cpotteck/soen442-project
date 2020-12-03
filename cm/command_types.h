@@ -12,4 +12,9 @@
 #define SEND_DATA 0x24
 #define RESET 0x25
 
+struct ReadTargetBuffer {
+  char* buffer;
+  u8 size;
+};
+
 #endif
