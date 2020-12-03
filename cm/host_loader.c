@@ -106,7 +106,7 @@ struct ReadBuffer readFile(char* argv) {
 
 void printUsage() {
   printf("Options: \n");
-  printf("-send <filename>\t Send target program\n");
+  printf("-send <filename>\t Send and run program on target.\n");
 }
 
 struct ReadBuffer receiveFromTarget(HANDLE handleCom) {
