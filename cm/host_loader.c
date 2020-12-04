@@ -292,16 +292,12 @@ int main(int argc, char* argv[]) {
     printUsage();
   }
   else {
-    /*---------------------- Setup Communication ----------------------*/
-      
-      HANDLE handleCom = setupCommunication();
-
     if (!strcmp(argv[1], "-send")) {
       if (argc < 3) {
         printf("Must specify .exe filename to send.\n");
         return 0;
       }
-
+      
       /*---------------------- Read .exe Program File ----------------------*/
 
       struct ReadBuffer readTargetBuffer = readFile(argv[2]);
@@ -311,6 +307,10 @@ int main(int argc, char* argv[]) {
         return 0;
       }
       printf("Program file size: %u bytes\n", messageBufSize);
+
+      /*---------------------- Setup Communication ----------------------*/
+      
+      HANDLE handleCom = setupCommunication();
 
       /*---------------------- Send Program ----------------------*/
 
