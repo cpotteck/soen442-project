@@ -9,7 +9,10 @@
 #define __hal_h
 
 #include "bsl_COut.h"
+//#include "_stdtype.h"
 
 void Hal_Init(void);
+u32 hal_IOReg_Read (u32 ioreg);
+void hal_IOReg_Write(u32 ioreg, u32 value);
 
 #endif

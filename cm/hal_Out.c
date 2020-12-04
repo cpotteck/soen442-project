@@ -4,7 +4,9 @@
 //
 */
 
-#include "ioreg.h"
+#include "hal_ioreg.h"
+#include "bsl_IOReg.h"           
+#include <avr/io.h>
 
 #ifndef IORegToMockUart
 #include <dos.h>
@@ -13,6 +15,25 @@
 // Software internal counters and values
 static u32 _nReads;
 static u32 _nWrites;
+
+void hal_Init(){
+    PortBDir |= PortBData;
+}
+
+unsigned char hal_Receive(){
+    /* Wait for data to be received */
+    while (!(UCSR0A & (1<<RXC0)));
+    /* Get and return received data from buffer */
+    return UDR0;
+}
+
+void hal_Transmit(unsigned char data)
+{
+    /* Wait for empty transmit buffer */
+    while (!(UCSR0A & (1<<UDRE0)));
+    /* Put data into buffer, sends the data */
+    UDR0 = data;
+}
 
 /*------------------------------------------------------------------------------------------------------------
  * IOReg_Read is a generic read function to get a value from a device register.
@@ -34,5 +55,6 @@ u32 IOReg_Read(u32 port) {
  * In the case of Dos16: ioreg is u16 (unsigned) and value is u8 (unsigned char)
  *-----------------------------------------------------------------------------------------------------------*/
 void IOReg_Write(u32 port, u32 value) {
+    port |= value;
     ++_nWrites;
 }

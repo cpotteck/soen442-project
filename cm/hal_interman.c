@@ -5,7 +5,7 @@
 */
 
 #include "hal_interman.h"
-#include <dos.h>
+//#include <dos.h>
 
 typedef void (__interrupt __far *Handler)();
 
