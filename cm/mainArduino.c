@@ -67,6 +67,7 @@ int main(void) {
 
     while(1) {
       char readChar = UART_receive();
+      
       // Calculate program size using first 2 bytes
       if (sizeCount <= 1) {
         programSize[sizeCount++] = (u8)readChar;
@@ -76,9 +77,8 @@ int main(void) {
       }
       // Load program
       else {
+        // Ignore program if too large
         if (size > MemMax ) {
-
-          // Ignore rest of program
           count++;
           while (count < size) {
             count++;
