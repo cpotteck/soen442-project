@@ -53,8 +53,8 @@ static char buf[12];    // Buffer reserved for conversion to ascii characters.
 
 static void COut_Init(void) {
   // Set Baud Rate
-  BaudRateRegH = 103 >> 8; 
-  BaudRateRegL = 103;
+  BaudRateRegH = UBRR >> 8; 
+  BaudRateRegL = UBRR;
 }
 
 static void COut_PutC(char c)        { Console_Putchar(c); }

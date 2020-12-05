@@ -15,6 +15,12 @@
 #define BaudRateRegH    UBRR0H
 #define BaudRateRegL    UBRR0L
 
+#ifdef BAUD
+#define UBRR F_CPU/16/BAUD-1
+#else
+#define UBRR F_CPU/16/9600-1 // Default baud rate to 9600
+#endif
+
         struct IVMOutDesc;
 typedef struct IVMOutDesc* IOut;
 
