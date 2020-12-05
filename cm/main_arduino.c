@@ -49,6 +49,8 @@ void main(void) {
 
 #else
 
+/*---------------------- Receive .exe Program ----------------------*/
+
 unsigned int UBRR0_value = 103;
 bool toggle = false;
 
