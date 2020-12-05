@@ -2,7 +2,7 @@
 
 #if ConsoleOutputWithPrintf
 
-u16 flags = 0x80;
+u16 flags = 0x00;
 u32 interruptVectors[256];
 
 u16 bsl_Flags() { return flags; }

@@ -22,5 +22,6 @@
 /*public*/ void  Interrupt_SetVector(u8 number, u32 handlerAddr);
 /*public*/ u32   Interrupt_GetVector(u8 number);
 u16 Flags(void);
+u16 GetStatusReg(void);
 
 #endif
