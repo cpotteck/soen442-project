@@ -55,3 +55,5 @@
 }
 
 u16  Flags() { return bsl_Flags(); }
+
+u16  GetStatusReg() { return bsl_Flags(); }
