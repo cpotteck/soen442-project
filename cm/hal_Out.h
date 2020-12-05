@@ -1,14 +1,22 @@
-// hal_ioreg.h -- IO Register Interface
+/* out.h - Cm VM Console Out Interface - no more macros.
+//
+// Copyright (C) 1999-2020 by Michel de Champlain
+//
+*/
 
-#ifndef __hal_IOReg_h
-#define __hal_IOReg_h
+#ifndef __CmVM_VMOut_h
+#define __CmVM_VMOut_h
 
-#include "bsl_stdtype.h"
+#include "bsl_COut.h"
 
-void hal_Init(void);
-unsigned char hal_Receive();
-void hal_Transmit(unsigned char);
-u32 hal_IOReg_Read (u32 ioreg);
-void hal_IOReg_Write(u32 ioreg, u32 value);
+void VMOut_Init(IOut out);
+
+void VMOut_PutB(bool b);
+void VMOut_PutC(char c);
+void VMOut_PutI(i32  i);
+void VMOut_PutU(u32  u);
+void VMOut_PutS(const char* s);
+void VMOut_PutX(u32  x);
+void VMOut_PutN(void);
 
 #endif

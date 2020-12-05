@@ -14,10 +14,7 @@
 // #define LedDirection DDRB
 // #define LedRegister PORTB
 // #define LedBit (1 << 5)
-#define PortBDir  0x24L
-#define PortBData 0x25L
 
-#include "bsl_stdtype.h"
 #include "bsl_stdtype.h"
 
 u32  bsl_IOReg_Read (u32 ioreg);

@@ -1,8 +1,6 @@
 #include "bsl_IOReg.h"
+#include "hal.h"
 
-void bsl_Init(){
-    hal_Init();
-}
 u32  bsl_IOReg_Read (u32 ioreg){
     hal_IOReg_Read(ioreg);
 }
