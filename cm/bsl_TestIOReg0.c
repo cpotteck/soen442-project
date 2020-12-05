@@ -7,7 +7,7 @@
 #include "hal.h"       // Hal_Init()
 #include "bsl_IOReg.h"
 
-#include <avr/io.h>
+#include <avr/io.h> 
 #include <util/delay.h>
 
 #define MS_DELAY 1000
@@ -15,7 +15,7 @@
 #define PortBDir  0x24L
 #define PortBData 0x25L
 
-int main(void ) {
+int main(void) {
     hal_Init();
 
     // Set onboard LED for output.

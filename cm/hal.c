@@ -33,8 +33,7 @@ void hal_Init(void) {
 u32 hal_IOReg_Read(u32 port) {
     
     ++_nReads;
-    return port;
-    // return (u32)((_nReads << 8) | (_nWrites << 4) | (port & 0xFFUL));
+    return (u32)((_nReads << 8) | (_nWrites << 4) | (port & 0xFFUL));
 }
 
 /*------------------------------------------------------------------------------------------------------------
@@ -45,9 +44,7 @@ u32 hal_IOReg_Read(u32 port) {
  * In the case of Dos16: ioreg is u16 (unsigned) and value is u8 (unsigned char)
  *-----------------------------------------------------------------------------------------------------------*/
 void hal_IOReg_Write(u32 port, u32 value) {
-    port = value;
     ++_nWrites;
-
 }
 
 
