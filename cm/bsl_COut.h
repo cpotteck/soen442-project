@@ -9,6 +9,12 @@
 
 #include "bsl_stdtype.h"
 
+#define CtrlStatusRegA  UCSR0A
+#define DataRegEmpty    UDRE0
+#define DataReg         UDR0
+#define BaudRateRegH    UBRR0H
+#define BaudRateRegL    UBRR0L
+
         struct IVMOutDesc;
 typedef struct IVMOutDesc* IOut;
 

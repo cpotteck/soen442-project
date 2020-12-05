@@ -41,8 +41,8 @@ IOut Out_GetFactory(const char* whichOne) {
 #include <avr/io.h>
 // Transmit a character to UART.
 static void TxChar(char c) {
-  while ( !(UCSR0A & (1 << UDRE0)) );
-  UDR0 = c;
+  while ( !(CtrlStatusRegA & (1 << DataRegEmpty)) );
+  DataReg = c;
 }
 
 // From '_console.c'
@@ -52,10 +52,9 @@ static char buf[12];    // Buffer reserved for conversion to ascii characters.
                         // Need to cover max size (12) on a "i32" (sign + 10 chars + null)
 
 static void COut_Init(void) {
-  UBRR0H = 103 >> 8; 
-  UBRR0L = 103;
-
-  UCSR0B |= (1 << TXCIE0);
+  // Set Baud Rate
+  BaudRateRegH = 103 >> 8; 
+  BaudRateRegL = 103;
 }
 
 static void COut_PutC(char c)        { Console_Putchar(c); }
