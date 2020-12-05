@@ -1,0 +1,1 @@
+gcc target_loader.c windows_comm.c -o target_loader

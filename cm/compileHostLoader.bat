@@ -1,1 +1,0 @@
-gcc host_loader.c windows_comm.c -o host_loader

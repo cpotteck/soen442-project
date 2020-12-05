@@ -1,1 +1,0 @@
-gcc -DConsoleOutputWithPrintf mainHost.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o cmTestHost
