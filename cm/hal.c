@@ -8,7 +8,7 @@
 #include "hal_Out.h"
 
 #ifndef IORegToMockUart
-//#include <dos.h>
+#include <dos.h>
 #endif
 
 // Software internal counters and values

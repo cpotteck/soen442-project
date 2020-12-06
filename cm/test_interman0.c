@@ -5,7 +5,7 @@
 */
 
 #include <stdio.h>
-//#include <dos.h>
+#include <dos.h>
 
 #include "hal.h" // Hal_Init()
 #include "out.h" // All VMOut_Put*

@@ -5,7 +5,7 @@
 */
 
 #include <stdio.h>
-//#include <dos.h>
+#include <dos.h>
 #include <int.h>       // int_gen
 
 #include "hal.h"       // Hal_Init()
