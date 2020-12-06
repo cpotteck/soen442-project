@@ -5,7 +5,7 @@ Tests
 gcc -DConsoleOutputWithPrintf tvmstack.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o tvmstack
 
 // Compile mainHost for host
-gcc -DConsoleOutputWithPrintf mainHost.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o cmTestHost
+gcc -DConsoleOutputWithPrintf main_host.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o cmTestHost
 
 // Compile mainArduino for Arduino
 See cmTestArduino.bat
@@ -23,5 +23,5 @@ gcc "aunit.c" -o aunit
 
 Task 5
 
-// Compile host loader
-gcc host_loader.c -o host_loader
+// Compile target loader
+gcc target_loader.c -o target_loader
