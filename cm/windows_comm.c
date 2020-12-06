@@ -5,13 +5,15 @@
 #include "bsl_stdtype.h"
 #include "command_types.h"
 
-
+#ifndef TARGET_PORT
+#define TARGET_PORT "COM8"
+#endif
 
 HANDLE setupCommunication() {
   /*---------------------- Open Port ----------------------*/
 
   HANDLE handleCom;
-  char PortName[] = "COM8";
+  char PortName[] = TARGET_PORT;
 
   handleCom = CreateFile(PortName, // Port name
                       GENERIC_READ | GENERIC_WRITE, //Read/Write
