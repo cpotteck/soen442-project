@@ -4,6 +4,8 @@
 
 **Note:** the following commands were written and executed with Windows Command Prompt in mind. They were not tested on a Linux shell and from our experience, some might break on PowerShell.
 
+**Note:** the following commands assume that you are in the root directory of the repository before each step.
+
 ### Task 0
 
 Compile aunit:
@@ -18,29 +20,57 @@ Run aunit:
 
 ### Task 1
 
+Change directory:
+```bash
+cd cm
+```
+
 Compile cm:
 ```bash
 gcc -DConsoleOutputWithPrintf bsl_console.c bsl_COut.c bsl_xtoa.c admin.c hal.c ioreg.c out.c vm.c vmstack.c -o cm
 ```
 
-Run the tests (assuming the cm executable, aunit, and test files are all under the same directory):
+Change directory:
 ```bash
-.\runAunitTests.bat
+cd ..
+cd tests
+```
+
+Run the tests:
+```bash
+.\run_aunit_tests.bat
 ```
 
 ### Task 2
 
+Change directory:
+```bash
+cd cm
+```
+
 Compile cm:
 ```bash
 gcc -DConsoleOutputWithPrintf bsl_console.c bsl_COut.c bsl_xtoa.c admin.c hal.c ioreg.c out.c vm.c vmstack.c -o cm
 ```
 
+Change directory:
+```bash
+cd ..
+cd tests
+```
+
 Run the tests (assuming the cm executable, aunit, and test files are all under the same directory):
 ```bash
-.\runAunitTests.bat
+.\run_aunit_tests.bat
 ```
 
 ### Task 3
+
+
+Change directory:
+```bash
+cd cm
+```
 
 Compile source files and flash to Arduino:
 
@@ -54,6 +84,11 @@ avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:debug_xtoa.hex:i
 
 ### Task 4
 
+Change directory:
+```bash
+cd cm
+```
+
 Compile source files and flash to Arduino:
 
 **Note:** same as in Task 3, your COM port might be different! Substitute the port in the third command with yours before running.
@@ -65,6 +100,11 @@ avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:cm_testArduino_pr
 ```
 
 ### Task 5
+
+Change directory:
+```bash
+cd cm
+```
 
 Compile loader:
 
@@ -86,11 +126,18 @@ avrdude -c arduino -p atmega328p -b 57600 -P COM3 -D -Uflash:w:cm_testArduino_lo
 
 Use the host loader to load and run a program onto the arduino:
 
+**Note:** make sure the T01.exe file is copied into the /cm directory.
+
 ```
 ./target_loader.exe -send T01.exe
 ```
 
 ### Task 6
+
+Change directory:
+```bash
+cd cm
+```
 
 Test `test_interman0.c`:
 ```bash
