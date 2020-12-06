@@ -37,7 +37,7 @@ u16 flags;
 u32 interruptVectors[256];
 
 u16 bsl_Flags() { 
-    flags = SREG;
+    flags = StatusReg;
     return flags; 
 }
 
@@ -46,13 +46,13 @@ void bsl_cli() { cli();}
 void bsl_sei() { sei();}
 
 u16 bsl_SaveAndDisable() {
-    flags = SREG;
+    flags = StatusReg;
     bsl_cli();
     return flags;
 }
 
 void bsl_Restore(u16 setFlags) {
-    SREG = setFlags;
+    StatusReg = setFlags;
 }
 
 void bsl_SetVector(u8 number, u32 handlerA) {

@@ -3,6 +3,8 @@
 
 #include "bsl_stdtype.h"
 
+#define StatusReg SREG
+
 u16 bsl_Flags(void);
 void bsl_cli(void);
 void bsl_sei(void);
