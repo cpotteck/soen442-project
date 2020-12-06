@@ -41,8 +41,8 @@ IOut Out_GetFactory(const char* whichOne) {
 #include <avr/io.h>
 // Transmit a character to UART.
 static void TxChar(char c) {
-  while ( !(UCSR0A & (1 << UDRE0)) );
-  UDR0 = c;
+  while ( !(CtrlStatusRegA & (1 << DataRegEmpty)) );
+  DataReg = c;
 }
 
 // From '_console.c'
@@ -52,15 +52,14 @@ static char buf[12];    // Buffer reserved for conversion to ascii characters.
                         // Need to cover max size (12) on a "i32" (sign + 10 chars + null)
 
 static void COut_Init(void) {
-  UBRR0H = 103 >> 8; 
-  UBRR0L = 103;
-
-  UCSR0B |= (1 << TXCIE0);
+  // Set Baud Rate
+  BaudRateRegH = UBRR >> 8; 
+  BaudRateRegL = UBRR;
 }
 
-static void COut_PutB(bool b)        { Console_Putchar(b ? 'T' : 'F'); }
 static void COut_PutC(char c)        { Console_Putchar(c); }
 static void COut_PutS(const char* s) { while (*s) Console_Putchar(*s++); }
+static void COut_PutB(bool b)        { COut_PutS(b ? "true" : "false"); }
 static void COut_PutI(i32  i)        { bsl_itoa(i, buf); COut_PutS(buf); }
 static void COut_PutU(u32  u)        { bsl_utoa(u, buf, 0, 10); COut_PutS(buf); }
 static void COut_PutX(u32  x)        { bsl_utoa(x, buf, 0, 16); COut_PutS(buf); } // Same behavior as Dos16 VM:

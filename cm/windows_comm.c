@@ -1,19 +1,19 @@
-//======================= Inspired by =======================//
-// www.xanthium.in
-// Copyright (C) 2014 Rahul.S
-// https://github.com/xanthium-enterprises/Serial-Programming-Win32API-C
-//===========================================================//
 
-#include<windows.h>
+
+#include <windows.h>
 #include<stdio.h>
-#include <string.h>
-int main()
-{
+#include "bsl_stdtype.h"
+#include "command_types.h"
 
+#ifndef TARGET_PORT
+#define TARGET_PORT "COM8"
+#endif
+
+HANDLE setupCommunication() {
   /*---------------------- Open Port ----------------------*/
 
   HANDLE handleCom;
-  char PortName[] = "COM8";
+  char PortName[] = TARGET_PORT;
 
   handleCom = CreateFile(PortName, // Port name
                       GENERIC_READ | GENERIC_WRITE, //Read/Write
@@ -64,7 +64,7 @@ int main()
   }
 
   /*---------------------- Set Timeouts ----------------------*/
-		
+    
   COMMTIMEOUTS comTimeouts = { 0 };
 
   comTimeouts.ReadIntervalTimeout         = 50;
@@ -82,44 +82,22 @@ int main()
     printf("Successfully set serial port timeouts \n\n");
   }
 
-  /*---------------------- Transmit Message ----------------------*/
+  return handleCom;
+}
 
-  //byte messageBuf[5] = {  0x00, 0x04, 0x91, 0xFF, 0x82, 0x00 };
-  byte messageBuf[]= { 0x00, 0x59, 0xE1, 0x00, 0x25, 0x71, 0xD5, 0x00, 0x2F, 0xFF, 0x85, 0xD5, 0x00, 0x44, 0xFF, 0x85,
-    0xD9, 0x09, 0xA8, 0xE0, 0x0E, 0xA0, 0x90, 0x1C, 0xE3, 0x04, 0xE0, 0x09, 0xA0, 0xB4, 0x00, 0xFF,
-    0x82, 0xE0, 0xF4, 0xFF, 0x87, 0x03, 0x04, 0xE7, 0xFF, 0xFF, 0xE7, 0xFF, 0xDB, 0x00, 0x54, 0x2E,
-    0x53, 0x74, 0x6D, 0x74, 0x00, 0x54, 0x65, 0x73, 0x74, 0x20, 0x31, 0x31, 0x3A, 0x20, 0x62, 0x72,
-    0x65, 0x61, 0x6B, 0x20, 0x53, 0x74, 0x61, 0x74, 0x65, 0x6D, 0x65, 0x6E, 0x74, 0x0A, 0x00, 0x39,
-    0x38, 0x37, 0x36, 0x35, 0x34, 0x33, 0x32, 0x31, 0x30, 0x0A, 0x00 };
-  //char messageBuf[4] = { 'T', 'e', 's', 't' };
-  DWORD  sizeBuf = sizeof(messageBuf);
-  DWORD  numBytesBuf = 0;               // Stores the number of bytes written using WriteFile
+struct ReadBuffer receiveFromTarget(HANDLE handleCom) {
+  /*---------------------- Receive ----------------------*/
 
-  Status = WriteFile(handleCom,
-              messageBuf,
-              sizeBuf,
-              &numBytesBuf,
-              NULL);
-  
-  if (Status == FALSE) {
-    printf("Error %d in WriteFile \n\n", GetLastError());
-    system("pause");
-    exit(0);
-  }
-  else {
-    //printf("\n Message sent to %s: %c \n", PortName, messageBuf[0]);
-  }
-
-/*---------------------- Receive ----------------------*/
   printf("Receiving...\n\n");
   DWORD dwEventMask;
   char  ReadData;
   DWORD NoBytesRead;
+  struct ReadBuffer readTargetBuffer;
   char* SerialBuffer = (char*)calloc(0, sizeof(char));
-  unsigned char count = 0;
+  u8 count = 0;
 
   // Mask
-  Status = SetCommMask(handleCom, EV_RXCHAR);
+  BOOL Status = SetCommMask(handleCom, EV_RXCHAR);
   if (Status == FALSE)
   {
     printf_s("Error in SetCommMask\n\n");
@@ -146,28 +124,35 @@ int main()
   }
   while (NoBytesRead > 0);
   count--;
-  printf("---Character Count---\n%d", count);
-
-  int index = 0;
-
-  // Print as ASCII characters
-  printf("\n\n---ASCII---\n");
-  for (index = 0; index < count; index++)
-  {
-    printf("%c", *(SerialBuffer + index));
-  }
-  printf("\n");
-
-  // Print as hex
-  printf("---Hex---\n");
-  for (index = 0; index < count; index++)
-  {
-    printf("0x%02x ", (unsigned char)SerialBuffer[index]);
-  }
-  printf("\n");
-
-
-/*---------------------- Close ----------------------*/
-  CloseHandle(handleCom);
-  return 0;
+      
+  readTargetBuffer.buffer = SerialBuffer;
+  readTargetBuffer.size = count;
+  return readTargetBuffer;
 }
+
+void sendToTarget(HANDLE handleCom, byte* sendBuffer, i32 sendSize) {
+  /*---------------------- Transmit Program ----------------------*/
+
+  //byte messageBuf[5] = {  0x00, 0x04, 0x91, 0xFF, 0x82, 0x00 };
+  // byte messageBuff[]= { 0x00, 0x59, 0xE1, 0x00, 0x25, 0x71, 0xD5, 0x00, 0x2F, 0xFF, 0x85, 0xD5, 0x00, 0x44, 0xFF, 0x85,
+  //   0xD9, 0x09, 0xA8, 0xE0, 0x0E, 0xA0, 0x90, 0x1C, 0xE3, 0x04, 0xE0, 0x09, 0xA0, 0xB4, 0x00, 0xFF,
+  //   0x82, 0xE0, 0xF4, 0xFF, 0x87, 0x03, 0x04, 0xE7, 0xFF, 0xFF, 0xE7, 0xFF, 0xDB, 0x00, 0x54, 0x2E,
+  //   0x53, 0x74, 0x6D, 0x74, 0x00, 0x54, 0x65, 0x73, 0x74, 0x20, 0x31, 0x31, 0x3A, 0x20, 0x62, 0x72,
+  //   0x65, 0x61, 0x6B, 0x20, 0x53, 0x74, 0x61, 0x74, 0x65, 0x6D, 0x65, 0x6E, 0x74, 0x0A, 0x00, 0x39,
+  //   0x38, 0x37, 0x36, 0x35, 0x34, 0x33, 0x32, 0x31, 0x30, 0x0A, 0x00 };
+  DWORD  numBytesBuf = 0; // Stores the number of bytes written using WriteFile
+
+  BOOL Status = WriteFile(handleCom,
+              sendBuffer,
+              sendSize,
+              &numBytesBuf,
+              NULL);
+  
+  if (Status == FALSE) {
+    printf("Error %d in WriteFile \n\n", GetLastError());
+    system("pause");
+    exit(0);
+  }
+}
+
+
