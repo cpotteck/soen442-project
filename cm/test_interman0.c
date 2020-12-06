@@ -29,7 +29,7 @@ void main(void) {
     Hal_Init();
 
     VMOut_PutS("Test #0 - Interrupt Manager\n");
-    VMOut_PutS("F[e]<DI>F[d]<EI>F[e]<SDI>SF[e]F[d]<RI>F[e]\n");
+    VMOut_PutS("F[d]<DI>F[d]<EI>F[e]<SDI>SF[e]F[d]<RI>F[e]\n");
 
     VMOut_PutS("F"); // VMOut_PutX((u32)flags);
     VMOut_PutS( (flags&IF) ? Enabled : Disabled);
