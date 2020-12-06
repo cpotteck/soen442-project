@@ -9,7 +9,7 @@
 
 #include "bsl_stdtype.h"
 
-u32  bsl_IOReg_Read(u32 ioreg);
-void bsl_IOReg_Write(u32 ioreg, u32 value);
+u8  bsl_IOReg_Read(u8 ioreg);
+void bsl_IOReg_Write(u8 ioreg, u8 value);
 
 #endif

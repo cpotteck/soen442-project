@@ -6,6 +6,7 @@
 #include "command_types.h"
 #define F_CPU 16000000UL
 #include <avr/io.h>
+#include <util/delay.h>
 
 #define MemMax 300
 
@@ -45,6 +46,28 @@ void main(void) {
     0x7C, 0x66, 0x61, 0x6C, 0x73, 0x65, 0x7C, 0x74, 0x72, 0x75, 0x65, 0x0A, 0x00 };
     VM_Init(T01);
     VM_execute(T01);
+}
+
+#elif TestTargetIOReg
+
+int main(void) {
+  Hal_Init();
+  // DDRB |= 1 << 5;
+  hal_IOReg_Write(0x24, 32);
+
+  // PORTB |= 1 << 5;
+  hal_IOReg_Write(0x25, 32);
+
+  while(1) { 
+    VMOut_PutS("Value of DDRB: ");
+    VMOut_PutU(hal_IOReg_Read(0x24));
+    VMOut_PutN();
+    VMOut_PutS("Value of PORTB: ");
+    VMOut_PutU(hal_IOReg_Read(0x25));
+    VMOut_PutN();
+
+    _delay_ms(1000);
+  }
 }
 
 #else

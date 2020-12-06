@@ -17,9 +17,10 @@ static u32 _nWrites;
  *
  * In the case of Windows: ioreg is u16 (unsigned) and return value is u8 (unsigned char)
  *-----------------------------------------------------------------------------------------------------------*/
-u32 bsl_IOReg_Read(u32 port) {
+u8 bsl_IOReg_Read(u8 port) {
     ++_nReads;
-    return (u32)((_nReads << 8) | (_nWrites << 4) | (port & 0xFFUL));
+    return (*(volatile u8 *)(port));
+    //return (u32)((_nReads << 8) | (_nWrites << 4) | (port & 0xFFUL));
 }
 
 /*------------------------------------------------------------------------------------------------------------
@@ -29,6 +30,7 @@ u32 bsl_IOReg_Read(u32 port) {
  *
  * In the case of Dos16: ioreg is u16 (unsigned) and value is u8 (unsigned char)
  *-----------------------------------------------------------------------------------------------------------*/
-void bsl_IOReg_Write(u32 port, u32 value) {
+void bsl_IOReg_Write(u8 port, u8 value) {
     ++_nWrites;
+    (*(volatile u8 *)(port)) = value; 
 }
