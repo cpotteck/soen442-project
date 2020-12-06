@@ -4,11 +4,7 @@
 //
 */
 
-#include "ioreg.h"
-
-#ifndef IORegToMockUart
-#include <dos.h>
-#endif
+#include "bsl_ioreg.h"
 
 // Software internal counters and values
 static u32 _nReads;
@@ -21,7 +17,7 @@ static u32 _nWrites;
  *
  * In the case of Windows: ioreg is u16 (unsigned) and return value is u8 (unsigned char)
  *-----------------------------------------------------------------------------------------------------------*/
-u32 IOReg_Read(u32 port) {
+u32 bsl_IOReg_Read(u32 port) {
     ++_nReads;
     return (u32)((_nReads << 8) | (_nWrites << 4) | (port & 0xFFUL));
 }
@@ -33,6 +29,6 @@ u32 IOReg_Read(u32 port) {
  *
  * In the case of Dos16: ioreg is u16 (unsigned) and value is u8 (unsigned char)
  *-----------------------------------------------------------------------------------------------------------*/
-void IOReg_Write(u32 port, u32 value) {
+void bsl_IOReg_Write(u32 port, u32 value) {
     ++_nWrites;
 }

@@ -4,12 +4,12 @@
 //
 */
 
-#ifndef __CmVM_IOReg_h
-#define __CmVM_IOReg_h
+#ifndef __bsl_IOReg_h
+#define __bsl_IOReg_h
 
 #include "bsl_stdtype.h"
 
-u32  IOReg_Read (u32 ioreg);
-void IOReg_Write(u32 ioreg, u32 value);
+u32  bsl_IOReg_Read(u32 ioreg);
+void bsl_IOReg_Write(u32 ioreg, u32 value);
 
 #endif
