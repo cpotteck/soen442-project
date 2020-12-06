@@ -26,6 +26,18 @@ Run the tests (assuming the cm executable, aunit, and test files are all under t
 .\runAunitTests.bat
 ```
 
+### Task 2
+
+Compile cm:
+```bash
+gcc -DConsoleOutputWithPrintf bsl_console.c bsl_COut.c bsl_xtoa.c admin.c hal.c ioreg.c out.c vm.c vmstack.c -o cm
+```
+
+Run the tests (assuming the cm executable, aunit, and test files are all under the same directory):
+```bash
+.\runAunitTests.bat
+```
+
 ### Task 6
 
 Test `test_interman0.c`:
