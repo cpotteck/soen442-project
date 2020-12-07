@@ -31,6 +31,8 @@ gcc -DConsoleOutputWithPrintf bsl_console.c bsl_COut.c bsl_xtoa.c admin.c hal.c 
 ```
 Copy the created `cm.exe` into /tests/
 
+Copy the created `aunit.exe` from Task 0 into /tests/
+
 Change directory:
 ```bash
 cd ..
