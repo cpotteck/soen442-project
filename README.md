@@ -26,7 +26,7 @@ gcc aunit.c -o aunit
 
 Run aunit:
 ```bash
-./aunit.exe
+aunit.exe
 ```
 
 ### Task 1 & Task 2
@@ -39,6 +39,7 @@ cd cm
 Compile cm:
 ```bash
 gcc -DConsoleOutputWithPrintf bsl_console.c bsl_COut.c bsl_xtoa.c admin.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o cm
+ 
 ```
 Copy the created `cm.exe` into /tests/
 
@@ -71,7 +72,10 @@ Compile source files and flash to Arduino:
 avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -D DebugXtoa bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o debug_xtoa.o
 avr-objcopy -O ihex -j .text -j .data debug_xtoa.o  debug_xtoa.hex
 avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:debug_xtoa.hex:i
+ 
 ```
+
+Check serial monitor of target for output
 
 ### Task 4
 
@@ -88,7 +92,10 @@ Compile source files and flash to Arduino:
 avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -D TestTargetPrecompiled main_arduino.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o cm_testArduino_precompiled.o
 avr-objcopy -O ihex -j .text -j .data cm_testArduino_precompiled.o  cm_testArduino_precompiled.hex
 avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:cm_testArduino_precompiled.hex:i
+ 
 ```
+
+Check serial monitor of target for output
 
 ### Task 5
 
@@ -113,14 +120,13 @@ Compile target source files and flash Arduino:
 avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart main_arduino.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o cm_testArduino_loader.o
 avr-objcopy -O ihex -j .text -j .data cm_testArduino_loader.o  cm_testArduino_loader.hex
 avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:cm_testArduino_loader.hex:i
+ 
 ```
 
-Use the host loader to load and run a program onto the arduino:
-
-**Note:** make sure the T01.exe file is copied into the /cm directory.
+Use the target loader to load and run a program onto the arduino:
 
 ```
-target_loader.exe -send T01.exe
+target_loader.exe -send /tests/T01.exe
 ```
 
 ### Task 6
@@ -136,6 +142,7 @@ Test `test_interman0.c` on target:
 avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -DInterruptManagerOn test_interman0.c hal_interman.c bsl_interman.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o test_interman0.o
 avr-objcopy -O ihex -j .text -j .data test_interman0.o  test_interman0.hex
 avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:test_interman0.hex:i
+ 
 ```
 
 Test `test_interman1.c` on target:
@@ -144,6 +151,7 @@ Test `test_interman1.c` on target:
 avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -DInterruptManagerOn test_interman1.c hal_interman.c bsl_interman.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o test_interman1.o
 avr-objcopy -O ihex -j .text -j .data test_interman1.o  test_interman1.hex
 avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:test_interman1.hex:i
+ 
 ```
 
 Test `hal_TestInterman0.c` on target:
@@ -152,7 +160,9 @@ Test `hal_TestInterman0.c` on target:
 avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -DInterruptManagerOn hal_TestInterman0.c hal_interman.c bsl_interman.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o hal_TestInterman0.o
 avr-objcopy -O ihex -j .text -j .data hal_TestInterman0.o  hal_TestInterman0.hex
 avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:hal_TestInterman0.hex:i
+ 
 ```
+Check serial monitor of target for output of tests
 
 ### Task 7
 
@@ -166,5 +176,7 @@ Test `bsl_TestIOReg0.c` on target:
 avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -D TestTargetIOReg bsl_TestIOReg0.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c bsl_ioreg.c hal_ioreg.c out.c vm.c vmstack.c -o bsl_TestIOReg0.o
 avr-objcopy -O ihex -j .text -j .data bsl_TestIOReg0.o  bsl_TestIOReg0.hex
 avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:bsl_TestIOReg0.hex:i
+ 
 ```
 
+Check serial monitor of target for output
