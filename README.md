@@ -1,5 +1,16 @@
 # soen442-project
 
+<!--ts-->
+   * [soen442-project](#soen442-project)
+      * [Commands](#commands)
+         * [Task 0](#task-0)
+         * [Task 1 &amp; Task 2](#task-1--task-2)
+         * [Task 3](#task-3)
+         * [Task 4](#task-4)
+         * [Task 5](#task-5)
+         * [Task 6](#task-6)
+         * [Task 7](#task-7)
+<!--te-->
 ## Commands
 
 **Note:** the following commands were written and executed with Windows Command Prompt in mind. They were not tested on a Linux shell and from our experience, some might break on PowerShell.
