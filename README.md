@@ -143,6 +143,11 @@ avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:hal_TestInterman0
 
 ### Task 7
 
+Change directory:
+```bash
+cd cm
+```
+
 Test `bsl_TestIOReg0.c` on target:
 ```bash
 avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -D TestTargetIOReg bsl_TestIOReg0.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c bsl_ioreg.c hal_ioreg.c out.c vm.c vmstack.c -o bsl_TestIOReg0.o
