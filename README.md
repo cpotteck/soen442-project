@@ -125,9 +125,6 @@ Test `test_interman0.c` on target:
 avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -DInterruptManagerOn test_interman0.c hal_interman.c bsl_interman.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o test_interman0.o
 avr-objcopy -O ihex -j .text -j .data test_interman0.o  test_interman0.hex
 avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:test_interman0.hex:i
-
-# run with test_interman0.c
-test_interman0.exe
 ```
 
 Test `test_interman1.c` on target:
@@ -136,9 +133,6 @@ Test `test_interman1.c` on target:
 avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -DInterruptManagerOn test_interman1.c hal_interman.c bsl_interman.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o test_interman1.o
 avr-objcopy -O ihex -j .text -j .data test_interman1.o  test_interman1.hex
 avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:test_interman1.hex:i
-
-# run with test_interman1.c
-test_interman1.exe
 ```
 
 Test `hal_TestInterman0.c` on target:
@@ -147,12 +141,14 @@ Test `hal_TestInterman0.c` on target:
 avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -DInterruptManagerOn hal_TestInterman0.c hal_interman.c bsl_interman.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o hal_TestInterman0.o
 avr-objcopy -O ihex -j .text -j .data hal_TestInterman0.o  hal_TestInterman0.hex
 avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:hal_TestInterman0.hex:i
-
-# run with hal_TestInterman0.c
-hal_TestInterman0.exe
 ```
 
 ### Task 7
+
+Change directory:
+```bash
+cd cm
+```
 
 Test `bsl_TestIOReg0.c` on target:
 ```bash
