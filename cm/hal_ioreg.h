@@ -5,7 +5,7 @@
 #include "bsl_ioreg.h"
 #include "bsl_stdtype.h"
 
-u8  hal_IOReg_Read(u8 ioreg);
-void hal_IOReg_Write(u8 ioreg, u8 value);
+u32  hal_IOReg_Read(u32 ioreg);
+void hal_IOReg_Write(u32 ioreg, u32 value);
 
 #endif

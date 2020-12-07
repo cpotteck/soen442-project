@@ -152,4 +152,10 @@ hal_TestInterman0.exe
 
 ### Task 7
 
-**TODO**
+Test `bsl_TestIOReg0.c` on target:
+```bash
+avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -D TestTargetIOReg bsl_TestIOReg0.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c bsl_ioreg.c hal_ioreg.c out.c vm.c vmstack.c -o bsl_TestIOReg0.o
+avr-objcopy -O ihex -j .text -j .data bsl_TestIOReg0.o  bsl_TestIOReg0.hex
+avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:bsl_TestIOReg0.hex:i
+```
+
