@@ -18,7 +18,7 @@ Run aunit:
 ./aunit.exe
 ```
 
-### Task 1
+### Task 1 & Task 2
 
 Change directory:
 ```bash
@@ -27,8 +27,9 @@ cd cm
 
 Compile cm:
 ```bash
-gcc -DConsoleOutputWithPrintf bsl_console.c bsl_COut.c bsl_xtoa.c admin.c hal.c ioreg.c out.c vm.c vmstack.c -o cm
+gcc -DConsoleOutputWithPrintf bsl_console.c bsl_COut.c bsl_xtoa.c admin.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o cm
 ```
+Copy the created `cm.exe` into /tests/
 
 Change directory:
 ```bash
@@ -38,30 +39,7 @@ cd tests
 
 Run the tests:
 ```bash
-.\run_aunit_tests.bat
-```
-
-### Task 2
-
-Change directory:
-```bash
-cd cm
-```
-
-Compile cm:
-```bash
-gcc -DConsoleOutputWithPrintf bsl_console.c bsl_COut.c bsl_xtoa.c admin.c hal.c ioreg.c out.c vm.c vmstack.c -o cm
-```
-
-Change directory:
-```bash
-cd ..
-cd tests
-```
-
-Run the tests (assuming the cm executable, aunit, and test files are all under the same directory):
-```bash
-.\run_aunit_tests.bat
+run_aunit_tests.bat
 ```
 
 ### Task 3
@@ -77,7 +55,7 @@ Compile source files and flash to Arduino:
 **Note:** your COM port might be different! Substitute the port in the third command with yours before running.
 
 ```
-avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -D DebugXtoa bsl_console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o debug_xtoa.o
+avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -D DebugXtoa bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o debug_xtoa.o
 avr-objcopy -O ihex -j .text -j .data debug_xtoa.o  debug_xtoa.hex
 avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:debug_xtoa.hex:i
 ```
@@ -94,7 +72,7 @@ Compile source files and flash to Arduino:
 **Note:** same as in Task 3, your COM port might be different! Substitute the port in the third command with yours before running.
 
 ```
-avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -D TestTargetPrecompiled main_arduino.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o cm_testArduino_precompiled.o
+avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -D TestTargetPrecompiled main_arduino.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o cm_testArduino_precompiled.o
 avr-objcopy -O ihex -j .text -j .data cm_testArduino_precompiled.o  cm_testArduino_precompiled.hex
 avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:cm_testArduino_precompiled.hex:i
 ```
@@ -111,7 +89,7 @@ Compile loader:
 **Note:** replace the COM port value with yours.
 
 ```
-gcc -DTARGET_PORT=\"COM3\" target_loader.c windows_comm.c -o target_loader
+gcc -DTARGET_PORT=\"COM8\" target_loader.c windows_comm.c -o target_loader
 ```
 
 Compile target source files and flash Arduino:
@@ -119,9 +97,9 @@ Compile target source files and flash Arduino:
 **Note:** replace the COM port value in the third command with yours.
 
 ```
-avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart main_arduino.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o cm_testArduino_loader.o
+avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart main_arduino.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o cm_testArduino_loader.o
 avr-objcopy -O ihex -j .text -j .data cm_testArduino_loader.o  cm_testArduino_loader.hex
-avrdude -c arduino -p atmega328p -b 57600 -P COM3 -D -Uflash:w:cm_testArduino_loader.hex:i
+avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:cm_testArduino_loader.hex:i
 ```
 
 Use the host loader to load and run a program onto the arduino:
@@ -129,7 +107,7 @@ Use the host loader to load and run a program onto the arduino:
 **Note:** make sure the T01.exe file is copied into the /cm directory.
 
 ```
-./target_loader.exe -send T01.exe
+target_loader.exe -send T01.exe
 ```
 
 ### Task 6
@@ -139,31 +117,37 @@ Change directory:
 cd cm
 ```
 
-Test `test_interman0.c`:
+Test `test_interman0.c` on target:
 ```bash
 # compile with test_interman0.c
-gcc -DConsoleOutputWithPrintf -DInterruptManagerOn .\test_interman0.c .\hal_interman.c ./bsl_interman.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o test_interman0
+avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -DInterruptManagerOn test_interman0.c hal_interman.c bsl_interman.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o test_interman0.o
+avr-objcopy -O ihex -j .text -j .data test_interman0.o  test_interman0.hex
+avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:test_interman0.hex:i
 
 # run with test_interman0.c
-./test_interman0.exe
+test_interman0.exe
 ```
 
-Test `test_interman1.c`:
+Test `test_interman1.c` on target:
 ```bash
 # compile with test_interman1.c
-gcc -DConsoleOutputWithPrintf -DInterruptManagerOn .\test_interman1.c .\hal_interman.c ./bsl_interman.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o test_interman1
+avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -DInterruptManagerOn test_interman1.c hal_interman.c bsl_interman.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o test_interman1.o
+avr-objcopy -O ihex -j .text -j .data test_interman1.o  test_interman1.hex
+avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:test_interman1.hex:i
 
 # run with test_interman1.c
-./test_interman1.exe
+test_interman1.exe
 ```
 
-Test `hal_TestInterman0.c`:
+Test `hal_TestInterman0.c` on target:
 ```bash
 # compile with hal_TestInterman0.c
-gcc -DConsoleOutputWithPrintf -DInterruptManagerOn .\hal_TestInterman0.c .\hal_interman.c ./bsl_interman.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o hal_TestInterman0
+avr-gcc -Os -Wall -DF_CPU=16000000UL -mmcu=atmega328p -D IORegToMockUart -DInterruptManagerOn hal_TestInterman0.c hal_interman.c bsl_interman.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c bsl_ioreg.c out.c vm.c vmstack.c -o hal_TestInterman0.o
+avr-objcopy -O ihex -j .text -j .data hal_TestInterman0.o  hal_TestInterman0.hex
+avrdude -c arduino -p atmega328p -b 57600 -P COM8 -D -Uflash:w:hal_TestInterman0.hex:i
 
 # run with hal_TestInterman0.c
-./hal_TestInterman0.exe
+hal_TestInterman0.exe
 ```
 
 ### Task 7
