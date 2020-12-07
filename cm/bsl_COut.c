@@ -102,7 +102,7 @@ IOut Out_GetFactory(const char* whichOne) {
 
 static void TestCout(void) {
     COut_PutS("Test xtoa\n");
-    COut_PutS("123456789ABCDEF\n");
+    COut_PutS("12345678900ABCDEF\n");
 
     bsl_itoa(1234, buf);            COut_PutS(buf);
     bsl_utoa(56789, buf, 0, 10);    COut_PutS(buf);
