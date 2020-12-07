@@ -5,7 +5,7 @@
 */
 
 #include "out.h"
-#include "ioreg.h"
+#include "hal_ioreg.h"
 #include <string.h> /* strtok */
 #include <stdlib.h> /* exit */
 
@@ -19,7 +19,7 @@
 #include "vm.h"
 
 #ifdef IORegOn
-#include "ioreg.h"
+#include "hal_ioreg.h"
 #endif
 
 #ifdef InterruptManagerOn

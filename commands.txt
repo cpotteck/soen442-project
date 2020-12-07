@@ -2,10 +2,10 @@
 Tests
 
 // Compile tvmstack for host
-gcc -DConsoleOutputWithPrintf tvmstack.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o tvmstack
+gcc -DConsoleOutputWithPrintf tvmstack.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c out.c vm.c vmstack.c -o tvmstack
 
 // Compile mainHost for host
-gcc -DConsoleOutputWithPrintf main_host.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c ioreg.c out.c vm.c vmstack.c -o cmTestHost
+gcc -DConsoleOutputWithPrintf main_host.c bsl_console.c bsl_COut.c bsl_xtoa.c hal.c hal_ioreg.c out.c vm.c vmstack.c -o cmTestHost
 
 // Compile mainArduino for Arduino
 See cmTestArduino.bat
@@ -15,7 +15,7 @@ See cmTestArduino.bat
 Task 0
 
 // Compile cm for host
-gcc -DConsoleOutputWithPrintf bsl_console.c bsl_COut.c bsl_xtoa.c admin.c hal.c ioreg.c out.c vm.c vmstack.c -o cm
+gcc -DConsoleOutputWithPrintf bsl_console.c bsl_COut.c bsl_xtoa.c admin.c hal.c hal_ioreg.c out.c vm.c vmstack.c -o cm
 
 // Compile aunit
 gcc "aunit.c" -o aunit
